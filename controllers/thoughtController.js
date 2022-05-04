@@ -9,5 +9,36 @@ module.exports={
         .catch((err)=> res.status(500).json(err))
     },
     // GET to get a single thought by its _id
-    
+    getSingleThought(req,res){
+        Thought.findOne({_id: req.params.thoughtId})
+        .select('-__v')
+        .then((thought)=>
+        !thought
+            ? res.status(404).json({message: 'No thought with that ID'})
+            : res.json(thought)
+        )  
+        .catch((err)=> res.status(500).json(err))  
+    },
+    //POST to create a new thought (don't forget to push the created thought's _id to the associated user's thoughts array field)
+    // createThought(req,res){
+    //     Thought.create(req.body)
+    //     .then((thought) => {
+    //         return User.findOneAndUpdate(
+    //             {_id: req.body.userId},
+    //             {$addToSet: {thoughts: thought._id}},
+    //             {new: true}
+    //         )
+    //     })
+    //     .then((user)=>
+    //     !user
+    //     ? res.status(404).json({
+    //         message: 'Thought created, but found no user with that ID',
+    //       })
+    //     : res.json('Created a new thought 🎉')
+    //     )
+    //     .catch((err) => {
+    //         console.log(err);
+    //         res.status(500).json(err);
+    //       });
+    // }
 }
