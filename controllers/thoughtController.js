@@ -42,22 +42,22 @@ module.exports={
           });
     },
     // PUT to update a thought by its _id  
-    // updateSingleThought(req,res){
-    //     Thought.findOneAndUpdate(
-    //         {_id:req.params.thoughtId},
-    //         {$set:req.body},
-    //         { runValidators: true, new: true }
-    //     )
-    //     .then((thought) =>
-    //         !thought
-    //             ? res.status(404).json({message: 'No thought with this id!'})
-    //             : res.json(thought)
-    //     )
-    //     .catch((err) => {
-    //         console.log(err);
-    //         res.status(500).json(err);
-    //     });
-    // }
+    updateSingleThought(req,res){
+        Thought.findOneAndUpdate(
+            {_id:req.params.thoughtId},
+            {$set:req.body},
+            { runValidators: true, new: true }
+        )
+        .then((thought) =>
+            !thought
+                ? res.status(404).json({message: 'No thought with this id!'})
+                : res.json(thought)
+        )
+        .catch((err) => {
+            console.log(err);
+            res.status(500).json(err);
+        });
+    },
     //DELETE to remove a thought by its _id
     deleteSingleThought(req,res){
         Thought.findOneAndRemove({_id:req.params.thoughtId})
@@ -78,6 +78,22 @@ module.exports={
           : res.json({ message: 'Thought successfully deleted!' })
       )
       .catch((err) => res.status(500).json(err));
+    },
+    // POST to create a reaction stored in a single thought's reactions array field
+    createReaction(req,res){
+        Thought.findOneAndUpdate(
+            { _id: req.params.thoughtId },
+            { $addToSet: { reactions: req.body } },
+            { runValidators: true, new: true }
+        )
+        .then((thought) =>
+        !thought
+          ? res
+              .status(404)
+              .json({ message: 'No thought found with that ID :(' })
+          : res.json(thought)
+      )
+      .catch((err) => res.status(500).json(err));
     }
-
+    // DELETE to pull and remove a reaction by the reaction's reactionId value
 }
