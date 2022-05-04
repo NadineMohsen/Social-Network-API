@@ -42,16 +42,16 @@ module.exports={
         .catch((err)=> res.status(500).json(err))  
     },
     // DELETE to remove user by its _id
-    // deleteSingleUser(req,res){
-    //     User.findOneAndDelete({ _id: req.params.userId })
-    //     .then((user) =>
-    //     !user
-    //       ? res.status(404).json({ message: 'No user with that ID' })
-    //       : Thought.deleteMany({ _id: { $in: user.thoughts } })
-    //      )
-    //   .then(() => res.json({ message: 'User and associated thoughts deleted!' }))
-    //   .catch((err) => res.status(500).json(err));
-    // },
+    deleteSingleUser(req,res){
+        User.findOneAndDelete({ _id: req.params.userId })
+        .then((user) =>
+        !user
+          ? res.status(404).json({ message: 'No user with that ID' })
+          : Thought.deleteMany({ _id: { $in: user.thoughts } })
+         )
+      .then(() => res.json({ message: 'User and associated thoughts deleted!' }))
+      .catch((err) => res.status(500).json(err));
+    },
     //POST to add a new friend to a user's friend list
     // addFriend(req,res){
     // }
